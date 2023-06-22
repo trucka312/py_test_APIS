@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block head %}
+
+{% endblock %}
+{% block body %}
+    <h3  class="h2 mb-3 font-weight-normal">Hi {% if current_user.is_authenticated %}{{ current_user.username }} {% else %} Khách {% endif %}</h3>
+    <ul>
+        {% for room in rooms %}
+            <li><a href="/rooms/{{ room.room_id }}">{{ room.room_name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

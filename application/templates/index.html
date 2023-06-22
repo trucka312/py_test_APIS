@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <h1 style="text-align: center">Danh sách sản phẩm</h1>
+    <table class="table">
+        <tr>
+            <th>Tên sản phẩm </th>
+            <th>Mã sản phẩm</th>
+            <th>Hành động</th>
+        </tr>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.item_no }}</td>
+                <td>
+                    <a href="/item/delete/{{ item.id }}">Delete</a>
+                    <a href="/item/update/{{ item.id }}">Update</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <form action="/" method="post">
+        <div class="col-md-5">
+            <label for="item_name" class="form-label">Ten san pham</label>
+            <input type="text" name="item_name" id="item_name" class="form-control"/>
+        </div>
+        <div class="col-md-5">
+            <label for="item_no" class="form-label">Ma san pham</label>
+            <input type="text" name="item_no" id="item_no" class="form-control"/>
+        </div>
+        <div class="col-md-5 text-center">
+            <button type="submit" class="btn btn-primary mb-3">Add</button>
+        </div>
+    </form>
+    {#    <table id="table_id" class="display table">#}
+    {#        <thead>#}
+    {#        <tr>#}
+    {#            <th>Name</th>#}
+    {#            <th>No</th>#}
+    {#        </tr>#}
+    {#        </thead>#}
+    {#    </table>#}
+    {#    <button onclick="load_item()">Load item</button>#}
+    <script>
+        function load_item() {
+            let url = "/api/v1/item"
+            let params = {
+                page: 1,
+                results_per_page: 20
+            }
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: params,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $('#table_id').DataTable({
+                        data: data.objects,
+                        columns: [
+                            {data: "item_name"},
+                            {data: "item_no"}
+                        ]
+                    })
+                    console.log("data", data)
+                },
+                error: function (xhr, type, error) {
+
+                }
+            });
+        }
+    </script>
+{% endblock %}

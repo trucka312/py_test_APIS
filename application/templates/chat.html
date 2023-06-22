@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block head %}
+{% endblock %}
+{% block body %}
+    <div class="chatwindow">
+        <h2>Penguin Coders Chat</h2>
+        <h2>Room : {{ session['room'] }}</h2><br>
+        <textarea id="chat" cols="70" rows="10" placeholder="No messages yet. Start one..."></textarea><br/><br/>
+        <input type="text" id="text" size="60" placeholder="Enter your message here"/>
+        <button type="button" id="send" class="btn btn-success">SEND</button>
+        <br/><br/>
+        <center>
+            <button type="button" class="btn btn-danger" onclick=leave_room()>Leave this Chat</button>
+        </center>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        var socket;
+        $(document).ready(function () {
+            socket = io.connect('http://' + document.domain + ":" + location.port + '/chat')
+            socket.on("connect", function () {
+                socket.emit("join", {})
+            })
+            socket.on('status', function (data) {
+                $('#chat').val($('#chat').val() + data.msg + '\n');
+                $('#chat').scrollTop($('#chat')[0].scrollHeight);
+            })
+            socket.on('message', function (data) {
+                $('#chat').val($('#chat').val() + data.msg + '\n');
+                $('#chat').scrollTop($('#chat')[0].scrollHeight);
+            });
+            $('#send').click(function (e) {
+                var text = $('#text').val();
+                socket.emit('text', {msg: text});
+                $('#text').val('');
+            });
+        })
+
+        function leave_room() {
+            socket.emit('left', {}, function () {
+                socket.disconnect();
+                // go back to the login page
+                window.location.href = "/index";
+            });
+        }
+    </script>
+{% endblock %}

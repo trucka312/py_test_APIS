@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <h1 style="text-align: center">Update Item</h1>
+    <form action="/item/update/{{ item.id }}" method="post">
+        <div class="col-md-5">
+            <label for="item_name" class="form-label">Ten san pham</label>
+            <input type="text" name="item_name" id="item_name" value="{{ item.item_name }}" class="form-control"/>
+        </div>
+        <div class="col-md-5">
+            <label for="item_no" class="form-label">Ma san pham</label>
+            <input type="text" name="item_no" id="item_no" value="{{ item.item_no }}" class="form-control"/>
+        </div>
+        <div class="col-md-5 text-center">
+            <button type="submit" class="btn btn-primary mb-3">Update</button>
+        </div>
+    </form>
+{% endblock %}
